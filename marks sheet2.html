@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mark Sheet</title>
+  <style>
+    .border {
+      border: 4px solid black;
+      padding: 0px;
+      margin: auto;
+      width: fit-content;
+    }
+    table {
+      border-spacing: 0px;
+    }
+    td {
+      padding: 13px 40px;
+      font-size: 15px;
+      color: black;
+    }
+    .heading {
+      color: #0b0251;
+      font-size: 35px;
+      text-align: left;
+      margin-bottom: 15px;
+    }
+    input[type="number"], input[type="text"] {
+      width: 100px;
+    }
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 25px;
+    }
+    .btn {
+      background-color: darkblue;
+      color: lightblue;
+      padding: 13px 35px;
+      border-radius: 2px;
+      font-size: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      background-color: black;
+    }
+  </style>
+  <script>
+    function marksToGradePoint(marks) {
+      if (marks >= 91) return 10;
+      else if (marks >= 81) return 9;
+      else if (marks >= 71) return 8;
+      else if (marks >= 61) return 7;
+      else if (marks >= 51) return 6;
+      else if (marks >= 41) return 5;
+      else if (marks >= 33) return 4;
+      else return 0;
+    }
+
+    function calculate() {
+      const form = document.form;
+      const marks = [
+        parseInt(form.sub0.value) || 0,
+        parseInt(form.sub1.value) || 0,
+        parseInt(form.sub2.value) || 0,
+        parseInt(form.sub3.value) || 0,
+        parseInt(form.sub4.value) || 0,
+        parseInt(form.sub5.value) || 0,
+      ];
+
+      const total = marks.reduce((a, b) => a + b, 0);
+      const percentage = (total * 100 / 600).toFixed(2);
+
+      form.total.value = total;
+      form.percent.value = percentage;
+
+      let grade = "Fail";
+      if (percentage >= 90) grade = "A+";
+      else if (percentage >= 80) grade = "A";
+      else if (percentage >= 70) grade = "B";
+      else if (percentage >= 60) grade = "C";
+      else if (percentage >= 50) grade = "D";
+
+      form.grade.value = grade;
+
+      const gradePoints = marks.map(marksToGradePoint);
+      const cgpa = (gradePoints.reduce((a, b) => a + b, 0) / gradePoints.length).toFixed(2);
+      form.cgpa.value = cgpa;
+    }
+
+    function resetForm() {
+      document.form.reset();
+    }
+
+    function printPage() {
+      window.print();
+    }
+  </script>
+</head>
+<body>
+  <fieldset class="border">
+    <legend class="heading"><b>Mark Sheet</b></legend>
+    <form name="form">
+      <table>
+        <tr>
+          <td>python</td>
+          <td><input type="number" name="sub0" min="0" max="100"> (Max: 100)</td>
+        </tr>
+        <tr>
+          <td>java</td>
+          <td><input type="number" name="sub1" min="0" max="100"> (Max: 100)</td>
+        </tr>
+        <tr>
+          <td>javascript</td>
+          <td><input type="number" name="sub2" min="0" max="100"> (Max: 100)</td>
+        </tr>
+        <tr>
+          <td>c</td>
+          <td><input type="number" name="sub3" min="0" max="100"> (Max: 100)</td>
+        </tr>
+        <tr>
+          <td>html,css</td>
+          <td><input type="number" name="sub4" min="0" max="100"> (Max: 100)</td>
+        </tr>
+        <tr>
+          <td>data structures</td>
+          <td><input type="number" name="sub5" min="0" max="100"> (Max: 100)</td>
+        </tr>
+        <tr>
+          <td>Total</td>
+          <td><input type="number" name="total" readonly> (Max: 600)</td>
+        </tr>
+        <tr>
+          <td>Percentage</td>
+          <td><input type="number" name="percent" readonly> (%)</td>
+        </tr>
+        <tr>
+          <td>Grade</td>
+          <td><input type="text" name="grade" readonly></td>
+        </tr>
+        <tr>
+          <td>CGPA</td>
+          <td><input type="number" name="cgpa" readonly></td>
+        </tr>
+      </table>
+      <div class="buttons">
+        <button type="button" class="btn" onclick="calculate()">Calculate</button>
+        <button type="button" class="btn" onclick="resetForm()">Reset</button>
+        <button type="button" class="btn" onclick="printPage()">Print</button>
+      </div>
+    </form>
+  </fieldset>
+</body>
+</html>
